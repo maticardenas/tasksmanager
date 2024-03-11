@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+from tasks.enums import TaskStatus
 from tasks.exceptions import TaskAlreadyClaimedException
 from tasks.models import Epic, Sprint, Task
 
@@ -110,3 +111,53 @@ def claim_task_optimistically(user_id: int, task_id: int) -> None:
             raise ValidationError("Another transaction updated the task. Please try again.")
     except Task.DoesNotExist:
         raise ValidationError("Task does not exist.")
+
+
+def search_tasks(created_at: date, status: TaskStatus) -> list[Task]:
+    tasks = Task.objects.filter(created_at__date=created_at, status=status).order_by("status", "created_at")
+    return tasks
+
+
+def list_tasks() -> list[Task]:
+    """
+    List tasks.
+    """
+    return list(Task.objects.all())
+
+
+def create_task(creator: User, title: str, description: str) -> Task:
+    """
+    Create a task.
+    """
+    return Task.objects.create(
+        title=title,
+        description=description,
+        creator=creator,
+    )
+
+
+def get_task(task_id: int) -> Task:
+    """
+    Get a task.
+    """
+    return Task.objects.get(id=task_id)
+
+
+def update_task(task_id: int, title: str, description: str) -> Task:
+    """
+    Update a task.
+    """
+    task = Task.objects.get(id=task_id)
+    task.title = title
+    task.description = description
+    task.save()
+    return task
+
+
+def delete_task(task_id: int) -> Task:
+    """
+    Delete a task.
+    """
+    task = Task.objects.get(id=task_id)
+    task.delete()
+    return task
