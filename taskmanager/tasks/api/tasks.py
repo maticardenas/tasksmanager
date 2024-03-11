@@ -3,10 +3,13 @@ from http import HTTPStatus
 from accounts.services.auth import require_permission
 from django.http import Http404, HttpRequest, HttpResponse
 from ninja import Path, Router
+from ninja.errors import HttpError
 from ninja.pagination import paginate
 from tasks.api.schemas import PathDate, TaskSchemaIn, TaskSchemaOut
 from tasks.api.security import JWTAuth
 from tasks.enums import TaskStatus
+from tasks.exceptions import TaskAlreadyClaimedException
+from tasks.models import Task
 from tasks.services import task as task_service
 
 api_router = Router(tags=["tasks"], auth=JWTAuth())
@@ -70,3 +73,15 @@ def delete_task(request: HttpRequest, task_id: int):
 @paginate
 def archived_tasks(request: HttpRequest, created_at: PathDate = Path(...)):
     return task_service.search_tasks(created_at=created_at.value(), status=TaskStatus.ARCHIVED.value)
+
+
+@api_router.patch("/{int:task_id}/claim", response={HTTPStatus.OK: TaskSchemaOut})
+def claim_task(request: HttpRequest, task_id: int):
+    try:
+        task = task_service.claim_task(request.user.id, task_id)
+    except TaskAlreadyClaimedException as exc:
+        raise HttpError(status_code=HTTPStatus.CONFLICT, message="Task already claimed.")
+    except Task.DoesNotExist:
+        raise HttpError(status_code=HTTPStatus.NOT_FOUND, message="Task not found.")
+
+    return task

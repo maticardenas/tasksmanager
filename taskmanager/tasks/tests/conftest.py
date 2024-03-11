@@ -1,16 +1,11 @@
-import os
-
-import django
 import pytest
-from tasks.enums import TaskStatus
-from tasks.tests.factories import UserFactory
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "taskmanager.settings")
-django.setup()
-
+from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from ninja.testing import TestClient
 from tasks.api.tasks import api_router
+from tasks.enums import TaskStatus
 from tasks.models import Task
+from tasks.tests.factories import UserFactory
 
 
 @pytest.fixture(autouse=True)
@@ -27,6 +22,21 @@ def client():
 def user():
     user = UserFactory()
     user.save()
+
+    return user
+
+
+@pytest.fixture
+def user_with_permissions(user: User):
+    from django.contrib.auth.models import Permission
+
+    content_type = ContentType.objects.get_for_model(Task)
+
+    change_task_permission = Permission.objects.get(codename="change_task", content_type=content_type)
+    add_task_permission = Permission.objects.get(codename="add_task", content_type=content_type)
+
+    user.user_permissions.add(change_task_permission)
+    user.user_permissions.add(add_task_permission)
 
     return user
 
@@ -58,3 +68,10 @@ def archived_task(user) -> Task:
     task.created_at = "2024-12-31"
     task.save()
     return task
+
+
+@pytest.fixture
+def uuid() -> str:
+    import uuid
+
+    return str(uuid.uuid4())
