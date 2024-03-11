@@ -86,6 +86,8 @@ def claim_task(user_id: int, task_id: int) -> None:
     task.status = "IN_PROGRESS"
     task.save()
 
+    return task
+
 
 def claim_task_optimistically(user_id: int, task_id: int) -> None:
     """

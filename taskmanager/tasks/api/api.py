@@ -13,4 +13,8 @@ api.add_router("tasks/", tasks_router)
 
 @api.exception_handler(ObjectDoesNotExist)
 def on_object_does_not_exist(request, exc):
-    return 404, {"message": "Object not found"}
+    return api.create_response(
+        request,
+        {"message": "Object not found"},
+        status=404,
+    )

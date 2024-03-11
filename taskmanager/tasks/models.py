@@ -5,7 +5,7 @@ from django.db import models
 
 TASK_STATUS_CHOICES = [
     ("UNASSIGNED", "Unassigned"),
-    ("IN PROGRESS", "In Progress"),
+    ("IN_PROGRESS", "In Progress"),
     ("DONE", "Done"),
     ("ARCHIVED", "Archived"),
 ]
