@@ -41,3 +41,6 @@ line-length = 120
 
 [tool.djlint]
 profile = "django"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "taskmanager.settings"

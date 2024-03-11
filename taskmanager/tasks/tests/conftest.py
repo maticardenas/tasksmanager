@@ -1,16 +1,9 @@
-import os
-
-import django
 import pytest
-from tasks.enums import TaskStatus
-from tasks.tests.factories import UserFactory
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "taskmanager.settings")
-django.setup()
-
 from ninja.testing import TestClient
 from tasks.api.tasks import api_router
+from tasks.enums import TaskStatus
 from tasks.models import Task
+from tasks.tests.factories import UserFactory
 
 
 @pytest.fixture(autouse=True)
