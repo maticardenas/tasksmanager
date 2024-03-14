@@ -24,4 +24,5 @@ urlpatterns = [
     path("accounts/", include("accounts.urls", namespace="accounts")),
     path("", include("tasks.urls", namespace="tasks")),
     path("api/v1/", api.urls, name="api"),
+    path("health/", include("health.urls", namespace="health")),
 ]
