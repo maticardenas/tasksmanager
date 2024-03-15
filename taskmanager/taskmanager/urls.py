@@ -25,4 +25,5 @@ urlpatterns = [
     path("", include("tasks.urls", namespace="tasks")),
     path("api/v1/", api.urls, name="api"),
     path("health/", include("health.urls", namespace="health")),
+    path("", include("django_prometheus.urls")),
 ]
