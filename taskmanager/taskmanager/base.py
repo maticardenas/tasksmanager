@@ -18,6 +18,7 @@ from tasks.api.pagination import TaskManagerPagination
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DEBUG = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -26,12 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-$dy#az$c&9r4ul9^vve4+u@3s4k84@1x3s*4p!*mcymg+b0$dg"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
 ]
-
 
 # Application definition
 
@@ -46,6 +45,7 @@ INSTALLED_APPS = [
     "storages",
     "widget_tweaks",
     "accounts",
+    "health",
 ]
 
 MIDDLEWARE = [

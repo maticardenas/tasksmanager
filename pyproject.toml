@@ -25,6 +25,7 @@ pytest-django = "^4.8.0"
 factory-boy = "^3.3.0"
 pyjwt = "^2.8.0"
 django-redis = "^5.4.0"
+gunicorn = "^21.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -44,4 +45,4 @@ line-length = 120
 profile = "django"
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "taskmanager.settings"
+DJANGO_SETTINGS_MODULE = "taskmanager.dev"

@@ -75,7 +75,10 @@ def archived_tasks(request: HttpRequest, created_at: PathDate = Path(...)):
     return task_service.search_tasks(created_at=created_at.value(), status=TaskStatus.ARCHIVED.value)
 
 
-@api_router.patch("/{int:task_id}/claim", response={HTTPStatus.OK: TaskSchemaOut})
+@api_router.patch(
+    "/{int:task_id}/claim",
+    response={HTTPStatus.OK: TaskSchemaOut, HTTPStatus.CONFLICT: None, HTTPStatus.NOT_FOUND: None},
+)
 def claim_task(request: HttpRequest, task_id: int):
     try:
         task = task_service.claim_task(request.user.id, task_id)
