@@ -17,6 +17,8 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "defaultpassword")
 # Media files storage
 # DEFAULT_FILE_STORAGE = 'your_production_default_file_storage'
 
+ALLOW_CIDR_NETS = os.getenv("ALLOWED_CIDR_NETS", "10.0.0.0/16")
+
 LOGGING = {
     "version": 1,
     "handlers": {
